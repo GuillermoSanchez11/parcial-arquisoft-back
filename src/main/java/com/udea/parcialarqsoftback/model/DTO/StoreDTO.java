@@ -4,9 +4,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.springframework.hateoas.RepresentationModel;
 
 @Data
-public class StoreDTO {
+public class StoreDTO extends RepresentationModel<StoreDTO> {
     @Schema(description = "The store id is automatically generated unique identifier", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private Long id;
 

@@ -12,8 +12,10 @@ public class StoreServices {
     @Autowired
     private IStoreRepository storeRepository;
 
-    public void addStore(Store store) {
+    public Store addStore(Store store) {
         storeRepository.save(store);
+        return store;
+        
     }
 
     public List<Store> getAllStores() {

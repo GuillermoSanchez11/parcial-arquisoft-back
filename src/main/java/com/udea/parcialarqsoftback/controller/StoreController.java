@@ -6,6 +6,8 @@ import com.udea.parcialarqsoftback.services.StoreServices;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,14 +22,16 @@ public class StoreController {
     private StoreServices storeServices;
 
     @PostMapping(value = "", headers = "API-Version=1")
-    public void addStore(@Valid @RequestBody StoreDTO storeDTO) {
+    public ResponseEntity<StoreDTO> addStore(@Valid @RequestBody StoreDTO storeDTO) {
         Store store = modelMapper.map(storeDTO, Store.class);
-        storeServices.addStore(store);
+        StoreDTO addedStore = modelMapper.map(storeServices.addStore(store), StoreDTO.class);
+        return new ResponseEntity<StoreDTO>(addedStore, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "", headers = "API-Version=1")
-    public List<StoreDTO> getAllStores() {
+    public ResponseEntity<List<StoreDTO>> getAllStores() {
         List<Store> stores = storeServices.getAllStores();
-        return stores.stream().map(store -> modelMapper.map(store, StoreDTO.class)).toList();
+        List<StoreDTO> storeDTOS = stores.stream().map(store -> modelMapper.map(store, StoreDTO.class)).toList();
+        return new ResponseEntity<List<StoreDTO>>(storeDTOS, HttpStatus.OK);
     }
 }

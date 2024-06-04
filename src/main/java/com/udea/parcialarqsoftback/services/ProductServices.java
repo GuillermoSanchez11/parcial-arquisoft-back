@@ -1,5 +1,6 @@
 package com.udea.parcialarqsoftback.services;
 
+import com.udea.parcialarqsoftback.model.DTO.ProductDTO;
 import com.udea.parcialarqsoftback.model.Product;
 import com.udea.parcialarqsoftback.model.ProductStore;
 import com.udea.parcialarqsoftback.model.Store;
@@ -21,14 +22,19 @@ public class ProductServices {
     @Autowired
     private StoreServices storeServices;
 
-    public void addProduct(Product product, Long storeId, Integer amount) {
+    public Product addProduct(Product product, Long storeId, Integer amount) {
         Product addedProduct = productRepository.save(product);
         ProductStore productStore = new ProductStore();
         productStore.setProduct(addedProduct);
-        productStore.setStore(storeServices.getStoreById(storeId));
+        Store store = storeServices.getStoreById(storeId);
+        if (store == null) {
+            return null;
+        }
+        productStore.setStore(store);
         productStore.setAmount(amount);
 
         productStoreRepository.save(productStore);
+        return addedProduct;
     }
 
     public Iterable<Product> getProductsByStoreID(Long id) {
