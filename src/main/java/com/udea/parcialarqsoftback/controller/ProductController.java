@@ -21,7 +21,7 @@ public class ProductController {
     private ModelMapper modelMapper;
 
     @PostMapping(value = "", headers = "API-Version=1")
-    public ResponseEntity<ProductDTO> addProduct(@Valid @RequestBody ProductDTO productDTO, @RequestParam Long storeId) {
+    public ResponseEntity<ProductDTO> addProduct(@Valid @RequestBody ProductDTO productDTO, @PathVariable Long storeId) {
         Product product = modelMapper.map(productDTO, Product.class);
         ProductDTO addedProduct = modelMapper.map(productServices.addProduct(product, storeId, productDTO.getAmount()),
                 ProductDTO.class);
@@ -34,7 +34,7 @@ public class ProductController {
     }
 
     @GetMapping(value = "", headers = "API-Version=1")
-    public ResponseEntity<Iterable<Product>> getProductByStoreID(@RequestParam Long storeId) {
+    public ResponseEntity<Iterable<Product>> getProductByStoreID(@PathVariable Long storeId) {
         return new ResponseEntity<>(productServices.getProductsByStoreID(storeId), HttpStatus.OK);
     }
 }
